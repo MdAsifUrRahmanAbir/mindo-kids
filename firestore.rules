@@ -1,0 +1,122 @@
+rules_version = '2';
+
+// Mindo Kids — Firestore security rules
+//
+// * Content collections are public-read (the app shows onboarding before
+//   sign-in) and admin-write. Admins are users with the custom claim
+//   `admin: true` (see tools/seed/make_admin.js) — your admin panel signs in
+//   with such an account.
+// * Premium lesson CONTENT (lessons/{id}/steps) is only readable when the
+//   lesson is free or the caller has an active subscription. The lesson
+//   card itself (title, thumbnail, isPremium) stays readable so the app can
+//   show a lock.
+// * subscriptions/{uid} is written only by Cloud Functions (Admin SDK
+//   bypasses rules) or by an admin (manual grants from the admin panel).
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return signedIn() && request.auth.token.admin == true;
+    }
+
+    function isOwner(uid) {
+      return signedIn() && request.auth.uid == uid;
+    }
+
+    function hasActiveSubscription() {
+      let path = /databases/$(database)/documents/subscriptions/$(request.auth.uid);
+      return signedIn()
+        && exists(path)
+        && get(path).data.active == true
+        && get(path).data.expiresAt > request.time;
+    }
+
+    // ---------- Content (managed by the admin panel) ----------
+
+    match /config/{docId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /onboarding/{id} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /worlds/{id} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /lessons/{lessonId} {
+      allow read: if true;
+      allow write: if isAdmin();
+
+      match /steps/{stepId} {
+        allow read: if isAdmin()
+          || get(/databases/$(database)/documents/lessons/$(lessonId)).data.isPremium != true
+          || hasActiveSubscription();
+        allow write: if isAdmin();
+      }
+    }
+
+    match /badges/{id} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /avatars/{id} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /plans/{id} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /pages/{id} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /announcements/{id} {
+      allow read: if signedIn();
+      allow write: if isAdmin();
+    }
+
+    // ---------- Commerce ----------
+
+    match /subscriptions/{uid} {
+      allow read: if isOwner(uid) || isAdmin();
+      allow write: if isAdmin();
+    }
+
+    // Purchase-token ledger written by Cloud Functions.
+    match /purchases/{id} {
+      allow read, write: if isAdmin();
+    }
+
+    // ---------- Family data (parent account) ----------
+
+    match /users/{uid} {
+      allow read, write: if isOwner(uid) || isAdmin();
+
+      match /{document=**} {
+        allow read, write: if isOwner(uid) || isAdmin();
+      }
+    }
+
+    // Admin dashboards: collection-group queries across all families.
+    match /{path=**}/progress/{lessonId} {
+      allow read: if isAdmin();
+    }
+    match /{path=**}/children/{childId} {
+      allow read: if isAdmin();
+    }
+  }
+}

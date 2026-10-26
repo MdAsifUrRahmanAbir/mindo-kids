@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "726383361842",
+    "project_id": "bitm-project-6f459",
+    "storage_bucket": "bitm-project-6f459.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:726383361842:android:716fd35825f2fbb148612b",
+        "android_client_info": {
+          "package_name": "com.amisysx.mindokids"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD1C4Lak3aVmXAFOEF-xB_CH3Chr_w0a7k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,12 @@
+{
+  "name": "mindo-kids-seed",
+  "private": true,
+  "description": "Seeds Firestore with Mindo Kids sample content and bootstraps the first admin.",
+  "scripts": {
+    "seed": "node seed.js",
+    "make-admin": "node make_admin.js"
+  },
+  "dependencies": {
+    "firebase-admin": "^14.5.0"
+  }
+}
