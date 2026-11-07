@@ -25,7 +25,17 @@ class AuthRepository {
   /// Creates the parent account. If the parent was using the app as a guest
   /// the guest account is upgraded in place, so children, progress and any
   /// subscription are kept.
-  Future<void> signUp({required String name, required String email, required String password}) async {
+  /// [phone] is in international format (e.g. +8801712345678); [countryCode]
+  /// is the ISO code from config/countries ("BD") and decides which worlds
+  /// the family sees.
+  Future<void> signUp({
+    required String name,
+    required String email,
+    required String password,
+    required String phone,
+    required String countryCode,
+    required String countryName,
+  }) async {
     final current = _auth.currentUser;
     UserCredential cred;
     if (current != null && current.isAnonymous) {
@@ -38,6 +48,9 @@ class AuthRepository {
     await _db.doc(FirestorePaths.user(user.uid)).set({
       'displayName': name.trim(),
       'email': email.trim(),
+      'phone': phone,
+      'countryCode': countryCode,
+      'countryName': countryName,
       'isGuest': false,
       'createdAt': DateTime.now(),
       'updatedAt': DateTime.now(),

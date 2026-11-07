@@ -72,6 +72,8 @@ class AuthTextField extends StatefulWidget {
     this.textInputAction = TextInputAction.next,
     this.onSubmitted,
     this.autofillHints,
+    this.prefixText,
+    this.hintText,
   });
 
   final TextEditingController controller;
@@ -83,6 +85,8 @@ class AuthTextField extends StatefulWidget {
   final TextInputAction textInputAction;
   final ValueChanged<String>? onSubmitted;
   final Iterable<String>? autofillHints;
+  final String? prefixText;
+  final String? hintText;
 
   @override
   State<AuthTextField> createState() => _AuthTextFieldState();
@@ -106,6 +110,9 @@ class _AuthTextFieldState extends State<AuthTextField> {
         style: AppTheme.body(16, color: AppColors.navy),
         decoration: InputDecoration(
           labelText: widget.label,
+          hintText: widget.hintText,
+          prefixText: widget.prefixText == null ? null : '${widget.prefixText} ',
+          prefixStyle: AppTheme.body(16, color: AppColors.navy, weight: FontWeight.w700),
           prefixIcon: widget.icon == null ? null : Icon(widget.icon, color: AppColors.textMuted),
           suffixIcon: widget.obscure
               ? IconButton(
@@ -147,6 +154,32 @@ String? validateEmail(String? v) {
   if (value.isEmpty) return 'Please enter your e-mail';
   if (!RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$').hasMatch(value)) return 'Please enter a valid e-mail';
   return null;
+}
+
+/// Digits only, 6–14 long. When the country has no dial code the number
+/// must include it ("+…").
+String? validatePhone(String? v, {required bool needsCountryCode}) {
+  final raw = v?.trim() ?? '';
+  if (raw.isEmpty) return 'Please enter your phone number';
+  if (needsCountryCode && !raw.startsWith('+')) return 'Include your country code, e.g. +44…';
+  final digits = raw.replaceAll(RegExp(r'\D'), '');
+  if (digits.length < 6 || digits.length > 14) return 'Please enter a valid phone number';
+  return null;
+}
+
+/// International format: dial code + national number without leading 0s.
+String toInternationalPhone(String input, String dialCode) {
+  final raw = input.trim();
+  final digits = raw.replaceAll(RegExp(r'\D'), '');
+  if (dialCode.isEmpty || raw.startsWith('+')) return '+$digits';
+  final dialDigits = dialCode.replaceAll(RegExp(r'\D'), '');
+  var national = digits;
+  // The parent may type the code anyway (8801…); don't double it.
+  if (national.startsWith(dialDigits) && national.length > dialDigits.length + 6) {
+    national = national.substring(dialDigits.length);
+  }
+  national = national.replaceFirst(RegExp(r'^0+'), '');
+  return '+$dialDigits$national';
 }
 
 String? validatePassword(String? v) {

@@ -39,6 +39,40 @@ const config = {
     imageUrl: '',
   },
   // config/strings is filled from strings.json (every UI label + default).
+
+  // config/countries — sign-up country/phone picker + country-wise learning.
+  // worldIds = the worlds that country sees, in display order.
+  // Empty worldIds = every world. Unlisted countries use OTHER.
+  countries: {
+    countries: [
+      { code: 'BD', name: 'Bangladesh', flag: '🇧🇩', dialCode: '+880', order: 1, isActive: true,
+        worldIds: ['bangla', 'english', 'numbers', 'arabic', 'brain', 'stories'] },
+      { code: 'IN', name: 'India', flag: '🇮🇳', dialCode: '+91', order: 2, isActive: true,
+        worldIds: ['hindi', 'english', 'numbers', 'bangla', 'urdu', 'brain', 'stories'] },
+      { code: 'PK', name: 'Pakistan', flag: '🇵🇰', dialCode: '+92', order: 3, isActive: true,
+        worldIds: ['urdu', 'english', 'numbers', 'arabic', 'brain', 'stories'] },
+      // Gulf: Arabic first, plus every South-Asian language for expat families.
+      ...[
+        ['SA', 'Saudi Arabia', '🇸🇦', '+966'],
+        ['AE', 'United Arab Emirates', '🇦🇪', '+971'],
+        ['QA', 'Qatar', '🇶🇦', '+974'],
+        ['KW', 'Kuwait', '🇰🇼', '+965'],
+        ['OM', 'Oman', '🇴🇲', '+968'],
+        ['BH', 'Bahrain', '🇧🇭', '+973'],
+      ].map(([code, name, flag, dialCode], i) => ({
+        code, name, flag, dialCode, order: 10 + i, isActive: true,
+        worldIds: ['arabic', 'english', 'numbers', 'bangla', 'hindi', 'urdu', 'brain', 'stories'],
+      })),
+      { code: 'MY', name: 'Malaysia', flag: '🇲🇾', dialCode: '+60', order: 20, isActive: true,
+        worldIds: ['english', 'arabic', 'numbers', 'brain', 'stories'] },
+      // Diaspora countries: show everything.
+      { code: 'GB', name: 'United Kingdom', flag: '🇬🇧', dialCode: '+44', order: 30, isActive: true, worldIds: [] },
+      { code: 'US', name: 'United States', flag: '🇺🇸', dialCode: '+1', order: 31, isActive: true, worldIds: [] },
+      { code: 'CA', name: 'Canada', flag: '🇨🇦', dialCode: '+1', order: 32, isActive: true, worldIds: [] },
+      { code: 'AU', name: 'Australia', flag: '🇦🇺', dialCode: '+61', order: 33, isActive: true, worldIds: [] },
+      { code: 'OTHER', name: 'Other country', flag: '🌍', dialCode: '', order: 99, isActive: true, worldIds: [] },
+    ],
+  },
 };
 
 // ------------------------------------------------------------ onboarding
@@ -523,7 +557,7 @@ const pages = {
       TEMPLATE_NOTE,
       '',
       '# What we collect',
-      '- Parent account: name and e-mail address.',
+      '- Parent account: name, e-mail address, phone number and country (used to show the right languages for your country).',
       '- Child profiles: a first name or nickname, an avatar and an age band. No photos, birth dates or location.',
       '- Learning progress: lessons completed, stars, badges and streaks.',
       '- Subscription status from Google Play / App Store.',

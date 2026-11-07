@@ -9,6 +9,8 @@ import 'package:mindo_kids/core/theme/app_theme.dart';
 import 'package:mindo_kids/core/widgets/common_widgets.dart';
 import 'package:mindo_kids/features/auth/presentation/controllers/auth_controller.dart';
 import 'package:mindo_kids/features/auth/presentation/widgets/auth_scaffold.dart';
+import 'package:mindo_kids/features/common_models/content_models.dart';
+import 'package:mindo_kids/features/country/providers/country_providers.dart';
 import 'package:mindo_kids/routes/route_names.dart';
 
 class SignUpScreen extends ConsumerStatefulWidget {
@@ -23,6 +25,8 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
   final _name = TextEditingController();
   final _email = TextEditingController();
   final _password = TextEditingController();
+  final _phone = TextEditingController();
+  String? _countryCode;
   bool _agreed = false;
 
   @override
@@ -30,11 +34,22 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
     _name.dispose();
     _email.dispose();
     _password.dispose();
+    _phone.dispose();
     super.dispose();
+  }
+
+  /// Selected country, defaulting to the phone's region when it's listed.
+  CountryModel _selectedCountry(List<CountryModel> countries) {
+    final device = deviceCountryCode();
+    return countries.firstWhere(
+      (c) => c.code == _countryCode,
+      orElse: () => countries.firstWhere((c) => c.code == device, orElse: () => countries.first),
+    );
   }
 
   Future<void> _submit() async {
     if (!(_formKey.currentState?.validate() ?? false)) return;
+    final country = _selectedCountry(ref.read(countriesProvider));
     if (!_agreed) {
       showSnack(context, 'Please accept the Terms and Privacy Policy.');
       return;
@@ -43,7 +58,14 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
     final wasGuest = ref.read(sessionControllerProvider).isGuest;
     final ok = await ref
         .read(authControllerProvider.notifier)
-        .signUp(name: _name.text, email: _email.text, password: _password.text);
+        .signUp(
+          name: _name.text,
+          email: _email.text,
+          password: _password.text,
+          phone: toInternationalPhone(_phone.text, country.dialCode),
+          countryCode: country.code,
+          countryName: country.name,
+        );
     if (ok && wasGuest && mounted) {
       showSnack(context, 'Account created — progress saved!');
       context.go(RouteNames.profile);
@@ -55,6 +77,8 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
     final t = ref.watch(textsProvider);
     final state = ref.watch(authControllerProvider);
     final isGuest = ref.watch(sessionControllerProvider.select((s) => s.isGuest));
+    final countries = ref.watch(countriesProvider);
+    final country = _selectedCountry(countries);
 
     return AuthScaffold(
       title: t('signUp.title', 'Create a parent account'),
@@ -79,6 +103,34 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                   keyboardType: TextInputType.emailAddress,
                   validator: validateEmail,
                   autofillHints: const [AutofillHints.email],
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 14),
+                  child: DropdownButtonFormField<String>(
+                    key: ValueKey('country-${country.code}-${countries.length}'),
+                    initialValue: country.code,
+                    isExpanded: true,
+                    style: AppTheme.body(16, color: AppColors.navy),
+                    decoration: InputDecoration(
+                      labelText: t('auth.country', 'Country'),
+                      prefixIcon: const Icon(Icons.public_rounded, color: AppColors.textMuted),
+                    ),
+                    items: [
+                      for (final c in countries)
+                        DropdownMenuItem(value: c.code, child: Text(c.label, overflow: TextOverflow.ellipsis)),
+                    ],
+                    onChanged: (code) => setState(() => _countryCode = code),
+                  ),
+                ),
+                AuthTextField(
+                  controller: _phone,
+                  label: t('auth.phone', 'Phone number'),
+                  icon: Icons.phone_outlined,
+                  prefixText: country.dialCode.isEmpty ? null : country.dialCode,
+                  hintText: country.dialCode.isEmpty ? '+44 7700 900123' : '1712 345678',
+                  keyboardType: TextInputType.phone,
+                  validator: (v) => validatePhone(v, needsCountryCode: country.dialCode.isEmpty),
+                  autofillHints: const [AutofillHints.telephoneNumberNational],
                 ),
                 AuthTextField(
                   controller: _password,

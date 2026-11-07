@@ -83,6 +83,46 @@ class WorldModel {
   );
 }
 
+/// One entry of config/countries → `countries: [ … ]`.
+///
+/// Drives the sign-up country/phone picker AND which worlds a family sees:
+/// `worldIds` lists the worlds for that country in display order; an empty
+/// list means "show every world". Families whose country isn't listed use
+/// the `OTHER` entry (or every world if there is none).
+class CountryModel {
+  static const otherCode = 'OTHER';
+
+  final String code;
+  final String name;
+  final String flag;
+  final String dialCode;
+  final List<String> worldIds;
+  final int order;
+  final bool isActive;
+
+  const CountryModel({
+    required this.code,
+    required this.name,
+    this.flag = '',
+    this.dialCode = '',
+    this.worldIds = const [],
+    this.order = 0,
+    this.isActive = true,
+  });
+
+  String get label => flag.isEmpty ? name : '$flag  $name';
+
+  factory CountryModel.fromMap(Map<String, dynamic> m) => CountryModel(
+    code: m.str('code').trim().toUpperCase(),
+    name: m.str('name'),
+    flag: m.str('flag'),
+    dialCode: m.str('dialCode').trim(),
+    worldIds: m.strings('worldIds'),
+    order: m.integer('order'),
+    isActive: m.boolean('isActive', true),
+  );
+}
+
 /// lessons/{id}
 class LessonModel {
   final String id;

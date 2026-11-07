@@ -26,6 +26,7 @@ function plan() {
 
   set('config/app', data.config.app);
   set('config/paywall', data.config.paywall);
+  set('config/countries', data.config.countries);
   set('config/strings', strings);
 
   const simple = ['onboarding', 'worlds', 'badges', 'avatars', 'plans', 'pages', 'announcements'];

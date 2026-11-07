@@ -16,8 +16,23 @@ class AuthController extends Notifier<AuthFormState> {
 
   Future<bool> signIn(String email, String password) => _run(() => _repo.signIn(email, password));
 
-  Future<bool> signUp({required String name, required String email, required String password}) =>
-      _run(() => _repo.signUp(name: name, email: email, password: password));
+  Future<bool> signUp({
+    required String name,
+    required String email,
+    required String password,
+    required String phone,
+    required String countryCode,
+    required String countryName,
+  }) => _run(
+    () => _repo.signUp(
+      name: name,
+      email: email,
+      password: password,
+      phone: phone,
+      countryCode: countryCode,
+      countryName: countryName,
+    ),
+  );
 
   Future<bool> continueAsGuest() => _run(_repo.continueAsGuest);
 

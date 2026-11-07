@@ -1,7 +1,9 @@
 {
+  "auth.country": "Country",
   "auth.email": "E-mail",
   "auth.parentName": "Your name",
   "auth.password": "Password",
+  "auth.phone": "Phone number",
   "breakTime.parentButton": "Grown-up: a little more time",
   "breakTime.subtitle": "You learned so much today. Let's rest our eyes and play again tomorrow!",
   "breakTime.title": "Time for a break!",

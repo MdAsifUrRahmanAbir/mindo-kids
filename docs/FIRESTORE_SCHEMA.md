@@ -40,6 +40,13 @@ Map of **every UI label** → text. Keys and default English values are in
 `tools/seed/strings.json` (seeded). Placeholders such as `{name}`, `{count}`
 must be kept. Leave a key empty to use the built-in default.
 
+### `config/countries`
+`countries`: list of `{code, name, flag, dialCode, worldIds[], order, isActive}`.
+Feeds the sign-up country + phone picker **and** country-wise learning:
+`worldIds` are the worlds that country sees, in display order (empty =
+every world). Families whose country isn't listed use the `OTHER` entry.
+Guests / accounts without a country use the phone's region.
+
 ### `onboarding/{id}`
 `title`, `subtitle`, `imageUrl` / `emoji`, `sideNote` (hand-written note),
 `accentColor` (blob behind the picture), `order`, `isActive`.
@@ -135,7 +142,8 @@ Admins may edit it directly or call `grantSubscription({uid, days, planId, note}
 
 ## Family data (the app writes; admin may read for support)
 
-* `users/{uid}`: `displayName`, `email`, `isGuest`, `createdAt`.
+* `users/{uid}`: `displayName`, `email`, `phone` (international, e.g. `+8801712345678`),
+  `countryCode` (e.g. `BD`), `countryName`, `isGuest`, `createdAt`.
 * `users/{uid}/children/{childId}`: `name`, `ageBand`, `avatarId`,
   `avatarUrl`, `avatarEmoji`, `streak`, `bestStreak`, `lastActiveDate`
   (`yyyy-MM-dd`), `activeDates` (last 60 days), `lessonsCompleted`, `stars`,

@@ -9,6 +9,7 @@ class FirestorePaths {
   static const String appConfig = 'config/app';
   static const String strings = 'config/strings';
   static const String paywall = 'config/paywall';
+  static const String countries = 'config/countries';
 
   static const String onboarding = 'onboarding';
   static const String worlds = 'worlds';

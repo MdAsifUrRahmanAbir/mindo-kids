@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:mindo_kids/core/constants/firestore_paths.dart';
 import 'package:mindo_kids/core/providers/firebase_providers.dart';
+import 'package:mindo_kids/core/utils/map_reader.dart';
 import 'package:mindo_kids/features/common_models/app_config_model.dart';
 import 'package:mindo_kids/features/common_models/content_models.dart';
 import 'package:mindo_kids/features/common_models/lesson_step_model.dart';
@@ -30,6 +31,16 @@ class ContentRepository {
 
   Stream<PaywallConfig> watchPaywall() =>
       _db.doc(FirestorePaths.paywall).snapshots().map((s) => PaywallConfig.fromMap(s.data() ?? const {}));
+
+  /// config/countries — every listed country (active or not), by `order`.
+  Stream<List<CountryModel>> watchCountries() => _db.doc(FirestorePaths.countries).snapshots().map((s) {
+    return (s.data() ?? const <String, dynamic>{})
+        .maps('countries')
+        .map(CountryModel.fromMap)
+        .where((c) => c.code.isNotEmpty)
+        .toList()
+      ..sort((a, b) => a.order.compareTo(b.order));
+  });
 
   // ---------- collections ----------
 
