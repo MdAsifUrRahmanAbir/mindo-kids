@@ -50,3 +50,6 @@ functions/lib/
 # NEVER commit Firebase service-account keys
 service-account*.json
 tools/seed/serviceAccount.json
+
+# Firebase admin SDK keys (any name)
+*firebase-adminsdk*.json

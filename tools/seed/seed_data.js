@@ -26,7 +26,7 @@ const config = {
     title: 'Unlock every world',
     subtitle: 'One family subscription for all lessons, stories and brain games.',
     benefits: [
-      'All learning worlds: English, Bangla, Numbers & more',
+      'All learning worlds: English, Bangla, Math, Arabic, Hindi & Urdu',
       'Story Worlds and Brain Power games',
       'New lessons added every month',
       'Up to 5 child profiles, no ads ever',
@@ -57,7 +57,7 @@ const onboarding = {
     order: 2,
     isActive: true,
     title: 'Learn in Many Languages',
-    subtitle: 'English, Bangla, numbers, stories and brain games — in short, calm sessions.',
+    subtitle: 'English, Bangla, Arabic, Hindi, Urdu, math, stories and brain games — in short, calm sessions.',
     emoji: '🌍',
     imageUrl: '',
     sideNote: 'Little Minds Infinite Worlds',
@@ -76,13 +76,14 @@ const onboarding = {
 };
 
 // ---------------------------------------------------------------- worlds
+// Beginner course: the 5 core subjects first, then the bonus play worlds.
 const worlds = {
   english: {
     order: 1,
     isActive: true,
     title: 'English World',
     subtitle: 'Letters, sounds & first words',
-    description: 'A–Z, uppercase and lowercase, picture words and pronunciation.',
+    description: 'A–Z, uppercase and lowercase, colours, picture words and pronunciation.',
     emoji: '📖',
     iconUrl: '',
     color: '#8E7CF8',
@@ -90,12 +91,25 @@ const worlds = {
     ttsLocale: 'en-US',
     isRtl: false,
   },
-  numbers: {
+  bangla: {
     order: 2,
     isActive: true,
-    title: 'Number World',
-    subtitle: 'Count, play and grow',
-    description: 'Counting, number recognition, quantities and simple sequences.',
+    title: 'Bangla World',
+    subtitle: 'বাংলা বর্ণ ও শব্দ',
+    description: 'স্বরবর্ণ, ব্যঞ্জনবর্ণ, বাংলা সংখ্যা আর ছবির সাথে নতুন শব্দ।',
+    emoji: 'অ',
+    iconUrl: '',
+    color: '#6CB8FF',
+    language: 'bn',
+    ttsLocale: 'bn-BD',
+    isRtl: false,
+  },
+  numbers: {
+    order: 3,
+    isActive: true,
+    title: 'Math World',
+    subtitle: 'Count, add and play',
+    description: 'Counting, number recognition, more & less, shapes and first additions.',
     emoji: '🔢',
     iconUrl: '',
     color: '#5FCF97',
@@ -103,8 +117,47 @@ const worlds = {
     ttsLocale: 'en-US',
     isRtl: false,
   },
+  arabic: {
+    order: 4,
+    isActive: true,
+    title: 'Arabic World',
+    subtitle: 'الحروف العربية',
+    description: 'Alif, Ba, Ta… Arabic letters, first words and numbers — read right to left.',
+    emoji: 'ا',
+    iconUrl: '',
+    color: '#2EC4B6',
+    language: 'ar',
+    ttsLocale: 'ar-SA',
+    isRtl: true,
+  },
+  hindi: {
+    order: 5,
+    isActive: true,
+    title: 'Hindi World',
+    subtitle: 'हिंदी वर्णमाला',
+    description: 'स्वर, व्यंजन, गिनती और चित्रों के साथ पहले शब्द।',
+    emoji: 'अ',
+    iconUrl: '',
+    color: '#FF9F43',
+    language: 'hi',
+    ttsLocale: 'hi-IN',
+    isRtl: false,
+  },
+  urdu: {
+    order: 6,
+    isActive: true,
+    title: 'Urdu World',
+    subtitle: 'اردو حروفِ تہجی',
+    description: 'Alif, Bay, Pay… the full Urdu alphabet with pictures — read right to left.',
+    emoji: 'ب',
+    iconUrl: '',
+    color: '#26A65B',
+    language: 'ur',
+    ttsLocale: 'ur-PK',
+    isRtl: true,
+  },
   brain: {
-    order: 3,
+    order: 7,
     isActive: true,
     title: 'Brain Power',
     subtitle: 'Memory, patterns & puzzles',
@@ -117,7 +170,7 @@ const worlds = {
     isRtl: false,
   },
   stories: {
-    order: 4,
+    order: 8,
     isActive: true,
     title: 'Story World',
     subtitle: 'Read, listen & imagine',
@@ -127,19 +180,6 @@ const worlds = {
     color: '#FFC24B',
     language: 'en',
     ttsLocale: 'en-US',
-    isRtl: false,
-  },
-  bangla: {
-    order: 5,
-    isActive: true,
-    title: 'Bangla World',
-    subtitle: 'বাংলা বর্ণ ও শব্দ',
-    description: 'স্বরবর্ণ, ব্যঞ্জনবর্ণ আর ছবির সাথে নতুন শব্দ।',
-    emoji: 'অ',
-    iconUrl: '',
-    color: '#6CB8FF',
-    language: 'bn',
-    ttsLocale: 'bn-BD',
     isRtl: false,
   },
 };
@@ -189,7 +229,7 @@ const lessons = {
     ],
   },
   en_cat_story: {
-    worldId: 'english', order: 3, isActive: true, isPremium: false, isDailySpark: true,
+    worldId: 'english', order: 5, isActive: true, isPremium: false, isDailySpark: true,
     title: 'The Cat on the Mat', subtitle: 'Read with Kitty', emoji: '🐱', thumbnailUrl: '', durationMinutes: 4,
     steps: [
       {
@@ -222,7 +262,7 @@ const lessons = {
     ],
   },
   en_animals: {
-    worldId: 'english', order: 4, isActive: true, isPremium: true, isDailySpark: false,
+    worldId: 'english', order: 6, isActive: true, isPremium: true, isDailySpark: false,
     title: 'Animals Around Us', subtitle: 'Farm friends and what they give', emoji: '🦁', thumbnailUrl: '', durationMinutes: 4,
     steps: [
       {
@@ -273,7 +313,7 @@ const lessons = {
     ],
   },
   num_sequence: {
-    worldId: 'numbers', order: 3, isActive: true, isPremium: true, isDailySpark: false,
+    worldId: 'numbers', order: 6, isActive: true, isPremium: true, isDailySpark: false,
     title: 'Number Train', subtitle: 'What comes next?', emoji: '🚂', thumbnailUrl: '', durationMinutes: 3,
     steps: [
       { type: 'quiz', question: '1, 2, 3, … what comes next?', options: ['5', '4', '2'], correctIndex: 1 },
@@ -369,7 +409,7 @@ const lessons = {
     ],
   },
   bn_vowels_2: {
-    worldId: 'bangla', order: 2, isActive: true, isPremium: true, isDailySpark: false,
+    worldId: 'bangla', order: 2, isActive: true, isPremium: false, isDailySpark: false,
     title: 'স্বরবর্ণ ই ঈ', subtitle: 'ই-তে ইঁদুর', emoji: 'ই', thumbnailUrl: '', durationMinutes: 3,
     steps: [
       { type: 'letter', letter: 'ই', word: 'ইঁদুর', text: 'ই-তে ইঁদুর', emoji: '🐭', color: '#5FCF97' },
@@ -397,7 +437,7 @@ const badges = {
     emoji: '🔥', iconUrl: '', color: '#FFD9C7', rule: { type: 'streak', value: 5 },
   },
   math_star: {
-    order: 3, isActive: true, title: 'Math Star', description: 'Finish 2 lessons in Number World.',
+    order: 3, isActive: true, title: 'Math Star', description: 'Finish 2 lessons in Math World.',
     emoji: '🎖️', iconUrl: '', color: '#E2DAFF', rule: { type: 'world_lessons', value: 2, worldId: 'numbers' },
   },
   curious_mind: {
@@ -525,5 +565,20 @@ const announcements = {
     createdAt: new Date(),
   },
 };
+
+// ---------------------------------------------------------------- beginner course
+const beginner = require('./beginner_course');
+Object.assign(lessons, beginner.lessons);
+Object.assign(badges, beginner.badges);
+
+// ---------------------------------------------------------------- alphabet (বর্ণমালা) course
+const alphabet = require('./alphabet_course');
+Object.assign(lessons, alphabet.lessons);
+Object.assign(badges, alphabet.badges);
+
+// ---------------------------------------------------------------- next steps: vowel signs, words, math, habits
+const more = require('./more_course');
+Object.assign(lessons, more.lessons);
+Object.assign(badges, more.badges);
 
 module.exports = { config, onboarding, worlds, lessons, badges, avatars, plans, pages, announcements };

@@ -66,7 +66,13 @@ async function main() {
   if (process.env.FIRESTORE_EMULATOR_HOST) {
     initializeApp({ projectId: process.env.GCLOUD_PROJECT || 'demo-mindo' });
   } else {
-    const keyPath = process.env.GOOGLE_APPLICATION_CREDENTIALS || path.join(__dirname, 'serviceAccount.json');
+    // Key lookup: env var → serviceAccount.json → any *firebase-adminsdk*.json in this folder.
+    const adminsdk = fs.readdirSync(__dirname).find((f) => /firebase-adminsdk.*\.json$/.test(f));
+    const keyPath =
+      process.env.GOOGLE_APPLICATION_CREDENTIALS ||
+      (fs.existsSync(path.join(__dirname, 'serviceAccount.json')) || !adminsdk
+        ? path.join(__dirname, 'serviceAccount.json')
+        : path.join(__dirname, adminsdk));
     if (!fs.existsSync(keyPath)) {
       console.error(`Service account key not found at ${keyPath}`);
       process.exit(1);

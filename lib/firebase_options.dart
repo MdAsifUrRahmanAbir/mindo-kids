@@ -17,19 +17,13 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      throw UnsupportedError(
-        'DefaultFirebaseOptions have not been configured for web - '
-        'you can reconfigure this by running the FlutterFire CLI again.',
-      );
+      return web;
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
         return android;
       case TargetPlatform.iOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for ios - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return ios;
       case TargetPlatform.macOS:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for macos - '
@@ -58,5 +52,23 @@ class DefaultFirebaseOptions {
     messagingSenderId: '726383361842',
     projectId: 'bitm-project-6f459',
     storageBucket: 'bitm-project-6f459.firebasestorage.app',
+  );
+  static const FirebaseOptions web = FirebaseOptions(
+    apiKey: 'AIzaSyDgsMJo_sl8R3BUiyfwLy5KZdza4tNIrR4',
+    appId: '1:726383361842:web:e58e6b7e439fd63348612b',
+    messagingSenderId: '726383361842',
+    projectId: 'bitm-project-6f459',
+    authDomain: 'bitm-project-6f459.firebaseapp.com',
+    storageBucket: 'bitm-project-6f459.firebasestorage.app',
+    measurementId: 'G-TZY67N3DYS',
+  );
+
+  static const FirebaseOptions ios = FirebaseOptions(
+    apiKey: 'AIzaSyAsMjBgsQeA7CzSNWQx-QPCSAY6utmR4Qs',
+    appId: '1:726383361842:ios:b643e06f9427ceca48612b',
+    messagingSenderId: '726383361842',
+    projectId: 'bitm-project-6f459',
+    storageBucket: 'bitm-project-6f459.firebasestorage.app',
+    iosBundleId: 'com.amisysx.mindokids',
   );
 }

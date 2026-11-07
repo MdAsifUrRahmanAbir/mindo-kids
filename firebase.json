@@ -1,1 +1,89 @@
-{"firestore":{"rules":"firestore.rules","indexes":"firestore.indexes.json"},"storage":{"rules":"storage.rules"},"functions":[{"source":"functions","codebase":"default","ignore":["node_modules",".git","*.local"]}],"emulators":{"auth":{"port":9099},"firestore":{"port":8080},"functions":{"port":5001},"storage":{"port":9199},"ui":{"enabled":true}},"flutter":{"platforms":{"android":{"default":{"projectId":"bitm-project-6f459","appId":"1:726383361842:android:716fd35825f2fbb148612b","fileOutput":"android/app/google-services.json"}},"dart":{"lib/firebase_options.dart":{"projectId":"bitm-project-6f459","configurations":{"android":"1:726383361842:android:716fd35825f2fbb148612b"}}}}}}
+{
+  "firestore": {
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  },
+  "storage": {
+    "rules": "storage.rules"
+  },
+  "functions": [
+    {
+      "source": "functions",
+      "codebase": "default",
+      "ignore": [
+        "node_modules",
+        ".git",
+        "*.local"
+      ]
+    }
+  ],
+  "emulators": {
+    "auth": {
+      "port": 9099
+    },
+    "firestore": {
+      "port": 8080
+    },
+    "functions": {
+      "port": 5001
+    },
+    "storage": {
+      "port": 9199
+    },
+    "ui": {
+      "enabled": true
+    }
+  },
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "bitm-project-6f459",
+          "appId": "1:726383361842:android:716fd35825f2fbb148612b",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "bitm-project-6f459",
+          "configurations": {
+            "android": "1:726383361842:android:716fd35825f2fbb148612b",
+            "ios": "1:726383361842:ios:b643e06f9427ceca48612b",
+            "web": "1:726383361842:web:e58e6b7e439fd63348612b"
+          }
+        }
+      }
+    }
+  },
+  "hosting": {
+    "site": "mindo-kids",
+    "public": "hosting/public",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "cleanUrls": true,
+    "trailingSlash": false,
+    "headers": [
+      {
+        "source": "/images/**",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "public, max-age=2592000"
+          }
+        ]
+      },
+      {
+        "source": "**/*.html",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "public, max-age=300"
+          }
+        ]
+      }
+    ]
+  }
+}
